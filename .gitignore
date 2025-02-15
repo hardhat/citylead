@@ -1,0 +1,12 @@
+*.rel
+*.sym
+*.lst
+*.asm
+*.ihx
+*.bin
+*.map
+*.noi
+/.vscode/*
+/bin/*
+/obj/*
+/s
