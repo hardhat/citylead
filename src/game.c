@@ -4,6 +4,8 @@
 #include "main.h"
 #include "game.h"
 
+struct Game game;
+
 void init_game(void)
 {
     fill_tilemap(TILE_COLOR_RED, 0, 0, tilemap_width, tilemap_height);

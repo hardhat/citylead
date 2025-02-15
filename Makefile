@@ -18,8 +18,8 @@ all: init $(BIN)
 PHONY: init clean
 
 init:
-	-mkdir -p obj
-	-mkdir -p bin
+	@mkdir -p obj
+	@mkdir -p bin
 
 $(BIN): $(OBJ)
 	$(LD) $(LDFLAGS) -o $(BIN:.bin=.ihx) \
@@ -35,7 +35,7 @@ obj/%rel: src/%asm
 	$(AS) $<
 
 obj/game.rel: src/game.c src/game.h
-obj/menu.rel: src/menu.c src/menu.h
+obj/menu.rel: src/menu.c src/menu.h src/game.h
 obj/main.rel: src/main.c src/game.h src/menu.h
 
 clean:

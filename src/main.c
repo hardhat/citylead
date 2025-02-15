@@ -200,7 +200,7 @@ void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
         uint8_t mask = 1<<(7-i);
         for(uint8_t j=0;j<8;j++)
         {
-            if(font[(c-32)*8+j] & (1<<(7-j)))
+            if(font[(c-32)*8+j] & (1<<(7-i)))
                 draw_text_pixel(x+i, y+j, color);
         }
     }
