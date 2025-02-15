@@ -1,4 +1,4 @@
-#City Lead for Zeal 8-bit OS
+# City Lead for Zeal 8-bit OS
 
 Choose between being mayor of the city or the don of the mafia.  Control the city and complete your goals.
 
