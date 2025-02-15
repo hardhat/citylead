@@ -13,6 +13,8 @@
 #include<zvb_sound.h>
 
 #include "Pitstop.h"
+#include "Speedway.h"
+#include "Speedway Bold.h"
 
 #include "main.h"
 #include "menu.h"
@@ -30,6 +32,7 @@ gfx_sprite sprites[128];
 
 // The drawing surface is 16 tiles with 16x16 pixels each
 uint8_t text_tiles[256*16];
+uint8_t *font = FONT_PITSTOP_BITMAP;
 
 uint8_t tilemap0[20*15];
 uint8_t tilemap1[20*15];
@@ -167,6 +170,22 @@ void clear_text_tiles(uint8_t color)
     memset(text_tiles, color, sizeof(text_tiles));
 }
 
+void set_font(enum FONT_FACE face)
+{
+    switch(face)
+    {
+        case FONT_PITSTOP:
+            font = FONT_PITSTOP_BITMAP;
+            break;
+        case FONT_SPEEDWAY:
+            font = FONT_SPEEDWAY_BITMAP;
+            break;
+        case FONT_SPEEDWAY_BOLD:
+            font = FONT_SPEEDWAY_BOLD_BITMAP;
+            break;
+    }
+}
+
 void draw_text_pixel(uint16_t x, uint8_t y,uint8_t color)
 {
     int offset = (x/16)*256+y*16+(x%16);
@@ -181,7 +200,7 @@ void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
         uint8_t mask = 1<<(7-i);
         for(uint8_t j=0;j<8;j++)
         {
-            if(FONT_PITSTOP_BITMAP[(c-32)*8+j] & (1<<(7-j)))
+            if(font[(c-32)*8+j] & (1<<(7-j)))
                 draw_text_pixel(x+i, y+j, color);
         }
     }
@@ -208,7 +227,7 @@ void draw_text_opaque(uint16_t x, uint8_t y, const char *text, uint8_t fg, uint8
             for(int k=0;k<8;k++)
             {
                 uint8_t mask = 1<<(7-k);
-                if(FONT_PITSTOP_BITMAP[(c-32)*8+j] & mask)
+                if(font[(c-32)*8+j] & mask)
                     draw_text_pixel(x+i*8+k, y+j, fg);
                 else
                     draw_text_pixel(x+i*8+k, y+j, bg);

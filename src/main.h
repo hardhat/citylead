@@ -55,6 +55,13 @@ enum TILE_COLORS
     TILE_COLOR_BLUE = 4
 };
 
+enum FONT_FACE
+{
+    FONT_PITSTOP,
+    FONT_SPEEDWAY,
+    FONT_SPEEDWAY_BOLD,
+};
+
 extern uint8_t tilemap_width;
 extern uint8_t tilemap_height;
 
@@ -73,6 +80,7 @@ void render_sprites(void);
 
 #define MAX_TEXT_TILES 16
 void clear_text_tiles(uint8_t color);
+void set_font(enum FONT_FACE font);
 void draw_text_pixel(uint16_t x, uint8_t y, uint8_t color);
 void draw_text(uint16_t x, uint8_t y, const char *text, uint8_t color);
 void draw_text_opaque(uint16_t x, uint8_t y, const char *text, uint8_t fg, uint8_t bg);
