@@ -52,7 +52,8 @@ enum TILE_COLORS
     TILE_COLOR_WHITE = 1,
     TILE_COLOR_RED = 2,
     TILE_COLOR_GREEN = 3,
-    TILE_COLOR_BLUE = 4
+    TILE_COLOR_BLUE = 4,
+    TILE_CURSOR = 5,    // This is 4 tiles in a 2x2 square
 };
 
 enum FONT_FACE

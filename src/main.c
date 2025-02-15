@@ -32,7 +32,7 @@ gfx_sprite sprites[128];
 
 // The drawing surface is 16 tiles with 16x16 pixels each
 uint8_t text_tiles[256*16];
-uint8_t *font = FONT_PITSTOP_BITMAP;
+const uint8_t *font = FONT_PITSTOP_BITMAP;
 
 uint8_t tilemap0[20*15];
 uint8_t tilemap1[20*15];
@@ -132,10 +132,27 @@ void init(void)
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
     zvb_sound_initialize(1);
     gfx_tileset_add_color_tile(&ctx, 0, TEXT_COLOR_BLACK);
-    gfx_tileset_add_color_tile(&ctx, 1, TEXT_COLOR_WHITE);
+    gfx_tileset_add_color_tile(&ctx, 1, TEXT_COLOR_LIGHT_GRAY);
     gfx_tileset_add_color_tile(&ctx, 2, TEXT_COLOR_RED);
     gfx_tileset_add_color_tile(&ctx, 3, TEXT_COLOR_GREEN);
-    gfx_tileset_add_color_tile(&ctx, 4, TEXT_COLOR_BLUE);
+    gfx_tileset_add_color_tile(&ctx, 4, TEXT_COLOR_DARK_GREEN);
+    // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
+    clear_text_tiles(TEXT_COLOR_BLACK);
+    // Horizontal line on top and bottom
+    for(int i=0;i<32;i++)
+    {
+        draw_text_pixel(i, 0, TEXT_COLOR_WHITE);
+        draw_text_pixel(i+32, 15, TEXT_COLOR_WHITE);
+    }
+    // Vertical line on left and right
+    for(int i=0;i<16;i++)
+    {
+        draw_text_pixel(0, i, TEXT_COLOR_WHITE);
+        draw_text_pixel(31, i, TEXT_COLOR_WHITE);
+        draw_text_pixel(32, i, TEXT_COLOR_WHITE);
+        draw_text_pixel(63, i, TEXT_COLOR_WHITE);
+    }
+    render_text(5, 4);
 
     ser = open("#SER0",O_WRONLY);
     if (ser < 0) {
@@ -283,8 +300,8 @@ void reset_sprite(void)
 void add_sprite(uint16_t x, uint8_t y, uint8_t sprite)
 {
     if(sprite_count >= 128) return;
-    sprites[sprite_count].x = x;
-    sprites[sprite_count].y = y;
+    sprites[sprite_count].x = x+16; // Note sprites are displayed anchored the bottom right corner
+    sprites[sprite_count].y = y+16;
     sprites[sprite_count].tile = sprite;
     sprites[sprite_count].flags = 0;
     sprite_count++;
@@ -370,6 +387,9 @@ int main(void)
     }
     log("Quitting.");
 
+    // Clear out sprites
+    memset(sprites, 0, sizeof(sprites));
+    render_sprites();
     zvb_sound_reset();
     ioctl(DEV_STDOUT, CMD_RESET_SCREEN, NULL);
     printf("Exiting...\n");
