@@ -50,11 +50,14 @@ enum TILE_COLORS
 {
     TILE_COLOR_BLACK = 0,
     TILE_COLOR_WHITE = 1,
-    TILE_COLOR_RED = 2,
-    TILE_COLOR_GREEN = 3,
-    TILE_COLOR_BLUE = 4,
-    TILE_CURSOR = 5,    // This is 4 tiles in a 2x2 square
+    TILE_COLOR_RED = 2, // 2-5 are red
+    TILE_COLOR_GREEN = 6, // 6-9 are green
+    TILE_COLOR_BLUE = 10,
+    TILE_CURSOR = 11,    // This is 4 tiles in a 2x2 square
 };
+
+#define PAL_RED 32  // index for red palette
+#define PAL_GREEN 48    // index for green palette
 
 enum FONT_FACE
 {

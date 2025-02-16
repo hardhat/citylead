@@ -19,6 +19,7 @@
 #include "main.h"
 #include "menu.h"
 #include "game.h"
+#include "img.h"
 
 enum GAME_STATE game_state = GAME_STATE_MENU;
 
@@ -133,9 +134,14 @@ void init(void)
     zvb_sound_initialize(1);
     gfx_tileset_add_color_tile(&ctx, 0, TEXT_COLOR_BLACK);
     gfx_tileset_add_color_tile(&ctx, 1, TEXT_COLOR_LIGHT_GRAY);
-    gfx_tileset_add_color_tile(&ctx, 2, TEXT_COLOR_RED);
-    gfx_tileset_add_color_tile(&ctx, 3, TEXT_COLOR_GREEN);
-    gfx_tileset_add_color_tile(&ctx, 4, TEXT_COLOR_DARK_GREEN);
+    //gfx_tileset_add_color_tile(&ctx, 2, TEXT_COLOR_RED);
+    //gfx_tileset_add_color_tile(&ctx, 3, TEXT_COLOR_GREEN);
+    gfx_palette_load(&ctx, fist_palette, 32, PAL_RED);
+    gfx_palette_load(&ctx, top_hat_palette, 32, PAL_GREEN);
+    gfx_tileset_options options1 = {TILESET_COMP_4BIT,TILE_COLOR_RED*256,PAL_RED,0};
+    gfx_tileset_load(&ctx, fist_tileset, 512, &options1);
+    gfx_tileset_options options2 = {TILESET_COMP_4BIT,TILE_COLOR_GREEN*256,PAL_GREEN,0};
+    gfx_tileset_load(&ctx, top_hat_tileset, 512, &options2);
     // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
     clear_text_tiles(TEXT_COLOR_BLACK);
     // Horizontal line on top and bottom
@@ -152,7 +158,7 @@ void init(void)
         draw_text_pixel(32, i, TEXT_COLOR_WHITE);
         draw_text_pixel(63, i, TEXT_COLOR_WHITE);
     }
-    render_text(5, 4);
+    render_text(TILE_CURSOR, 4);
 
     ser = open("#SER0",O_WRONLY);
     if (ser < 0) {

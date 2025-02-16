@@ -81,7 +81,13 @@ void draw_game(void)
             uint8_t color = TILE_COLOR_WHITE;
             if(game.districts[x][y].state == DISTRICT_STATE_MAYOR) color = TILE_COLOR_GREEN;
             if(game.districts[x][y].state == DISTRICT_STATE_MAFIA) color = TILE_COLOR_RED;
-            fill_tilemap(color, x*2, y*2, 2, 2);
+            if(color==TILE_COLOR_WHITE) {
+                fill_tilemap(color, x*2, y*2, 2, 2);
+            } else {
+                for(int i=0;i<2;i++)
+                    for(int j=0;j<2;j++)
+                        draw_tilemap(x*2+i, y*2+j, color+i+j*2);
+            }
         }
     }
     render_tilemap(0);
