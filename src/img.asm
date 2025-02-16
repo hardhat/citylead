@@ -15,6 +15,8 @@ _fist_tileset:
 _fist_tileset_data:
     .incbin "img/fist.zts"
 _fist_palette:
+    .dw _fist_palette_data
+_fist_palette_data:
     .incbin "img/fist.ztp"
 
 _selection_tileset:
@@ -22,6 +24,8 @@ _selection_tileset:
 _selection_tileset_data:
     .incbin "img/selection.zts"
 _selection_palette:
+    .dw _selection_palette_data
+_selection_palette_data:
     .incbin "img/selection.ztp"
 
 _top_hat_tileset:
@@ -29,4 +33,6 @@ _top_hat_tileset:
 _top_hat_tileset_data:
     .incbin "img/top_hat.zts"
 _top_hat_palette:
+    .dw _top_hat_palette_data
+_top_hat_palette_data:
     .incbin "img/top_hat.ztp"
