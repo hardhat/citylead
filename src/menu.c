@@ -2,9 +2,9 @@
 #include "menu.h"
 #include "game.h"
 
-#define TITLE_TILE 0x20
-#define MENU_TILE 0x30
-#define CHOICE_TILE 0x40
+#define TITLE_TILE 0x80
+#define MENU_TILE 0x90
+#define CHOICE_TILE 0xA0
 
 #define MAX_CHOICE_TIMER 4
 
@@ -18,7 +18,14 @@ void init_menu(void)
     clear_text_tiles(COL_DARK_BLUE);
     draw_text_opaque(4, 4, " City Leader ", COL_WHITE, COL_BLUE);
     render_text(TITLE_TILE, 7);
-    fill_tilemap(TILE_COLOR_WHITE, 0, 0, tilemap_width, tilemap_height);
+    //fill_tilemap(TILE_COLOR_WHITE, 0, 0, tilemap_width, tilemap_height);
+    for(int j=0;j<15;j++)
+    {
+        for(int i=0;i<20;i++)
+        {
+            draw_tilemap(i, j, TILE_COLOR_WHITE+(j%2)*2+(i%2));
+        }
+    }
     for(int i=0;i<7;i++) {
         draw_tilemap(7+i, 0, TITLE_TILE+i);
     }

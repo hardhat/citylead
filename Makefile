@@ -2,7 +2,7 @@ ZOS_PATH ?= ../Zeal-8-bit-OS
 ZVB_SDK_PATH ?= ../Zeal-VideoBoard-SDK
 BIN=bin/clead.bin
 OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/img.rel
-IMG=img/fist.zts img/selection.zts img/top_hat.zts
+IMG=img/fist.zts img/buildings.zts img/top_hat.zts
 CC=sdcc
 CFLAGS=-mz80 --std-c99 -c -I $(ZOS_PATH)/kernel_headers/sdcc/include/ -I $(ZVB_SDK_PATH)/include --codeseg TEXT --debug
 AS=sdasz80 -o -l -s
@@ -33,7 +33,7 @@ obj/%.rel: src/%.asm
 img/%.zts: img/%.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
 
-obj/game.rel: src/game.c src/game.h
+obj/game.rel: src/game.c src/game.h src/main.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h
 obj/main.rel: src/main.c src/game.h src/menu.h src/img.h
 obj/img.rel: src/img.asm $(IMG)

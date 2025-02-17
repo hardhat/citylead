@@ -132,12 +132,13 @@ void init(void)
 {
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
     zvb_sound_initialize(1);
-    gfx_tileset_add_color_tile(&ctx, 0, TEXT_COLOR_BLACK);
-    gfx_tileset_add_color_tile(&ctx, 1, TEXT_COLOR_LIGHT_GRAY);
-    //gfx_tileset_add_color_tile(&ctx, 2, TEXT_COLOR_RED);
-    //gfx_tileset_add_color_tile(&ctx, 3, TEXT_COLOR_GREEN);
+    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
+    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_DARK_BLUE);
+    gfx_palette_load(&ctx, buildings_palette, 32, PAL_WHITE);
     gfx_palette_load(&ctx, fist_palette, 32, PAL_RED);
     gfx_palette_load(&ctx, top_hat_palette, 32, PAL_GREEN);
+    gfx_tileset_options options0 = {TILESET_COMP_4BIT,TILE_COLOR_WHITE*256,PAL_WHITE,0};
+    gfx_tileset_load(&ctx, buildings_tileset, 512, &options0);
     gfx_tileset_options options1 = {TILESET_COMP_4BIT,TILE_COLOR_RED*256,PAL_RED,0};
     gfx_tileset_load(&ctx, fist_tileset, 512, &options1);
     gfx_tileset_options options2 = {TILESET_COMP_4BIT,TILE_COLOR_GREEN*256,PAL_GREEN,0};
