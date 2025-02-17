@@ -130,6 +130,7 @@ uint8_t handle_input(uint8_t key)
 
 void init(void)
 {
+    gfx_enable_screen(0);
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
     zvb_sound_initialize(1);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
@@ -160,6 +161,12 @@ void init(void)
         draw_text_pixel(63, i, TEXT_COLOR_WHITE);
     }
     render_text(TILE_CURSOR, 4);
+
+    fill_tilemap(TILE_COLOR_BLACK, 0, 0, tilemap_width, tilemap_height);
+    render_tilemap(0);
+    render_tilemap(1);
+
+    gfx_enable_screen(1);
 
     ser = open("#SER0",O_WRONLY);
     if (ser < 0) {
@@ -319,6 +326,14 @@ void render_sprites(void)
     gfx_sprite_render_array(&ctx, 0, sprites, sprite_count);
 }
 
+void clear_sprites(void)
+{
+    reset_sprite();
+    sprite_count=128;
+    render_sprites();
+    sprite_count=0;
+}
+
 void process_input(void)
 {
     unsigned char keys[32];
@@ -357,9 +372,6 @@ int main(void)
 {
     init();
 
-    fill_tilemap(TILE_COLOR_BLACK, 0, 0, tilemap_width, tilemap_height);
-    render_tilemap(0);
-    render_tilemap(1);
     set_state(GAME_STATE_MENU);
 
     while(!quit)

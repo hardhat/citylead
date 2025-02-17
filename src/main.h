@@ -82,6 +82,7 @@ void render_tilemap(uint8_t layer);
 void reset_sprite(void);
 void add_sprite(uint16_t x, uint8_t y, uint8_t sprite);
 void render_sprites(void);
+void clear_sprites(void);
 
 #define MAX_TEXT_TILES 16
 void clear_text_tiles(uint8_t color);

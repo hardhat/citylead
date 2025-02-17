@@ -163,8 +163,22 @@ void draw_game(void)
 
 void init_gameover(void)
 {
-    fill_tilemap(TILE_COLOR_GREEN, 0, 0, tilemap_width, tilemap_height);
+    for(int j=0;j<15;j++)
+    {
+        for(int i=0;i<20;i++)
+        {
+            draw_tilemap(i, j, TILE_COLOR_WHITE+(j%2)*2+(i%2));
+        }
+    }
+    char buffer[64];
+    clear_text_tiles(COL_DARK_RED);
+    sprintf(buffer, "Game over.");
+    draw_text(4, 4, buffer, COL_RED);
+    render_text(0x80, 7);
+    for(int i=0;i<6;i++)
+        draw_tilemap(7+i, 6, 0x80+i);
     render_tilemap(0);
+    clear_sprites();
     log("Game over.");
 }
 
