@@ -10,6 +10,7 @@ struct Game game;
 
 int cursor_x=0;
 int cursor_y=0;
+bool held[MAX_INPUT];
 
 void init_game(void)
 {
@@ -49,6 +50,7 @@ void init_game(void)
 
 void input_game(uint8_t key, bool down)
 {
+    held[key] = down;
     if(!down) return;
     switch(key) {
         case INPUT_START:
@@ -82,75 +84,86 @@ void update_game(void)
 
 void draw_game(void)
 {
-    // Draw the districts, with 32x32 blocks (2x2 tiles) for each district.
-    for(int x=0;x<7;x++)
-    {
-        for(int y=0;y<7;y++)
+    static int timer=0;
+    int held_count=0;
+    for(int i=0;i<MAX_INPUT;i++)
+        if(held[i]) held_count++;
+    if(held_count>1) timer=6; // Only allow one key at a time.
+
+    if(timer==0) {
+        // Draw the districts, with 32x32 blocks (2x2 tiles) for each district.
+        for(int x=0;x<7;x++)
         {
-            uint8_t color = TILE_COLOR_WHITE;
-            if(game.districts[x][y].state == DISTRICT_STATE_MAYOR) color = TILE_COLOR_GREEN;
-            if(game.districts[x][y].state == DISTRICT_STATE_MAFIA) color = TILE_COLOR_RED;
-            if(color==TILE_COLOR_WHITE) {
-                //fill_tilemap(color, x*2, y*2, 2, 2);
-                draw_tilemap(x*2, y*2, color);
-                draw_tilemap(x*2+1, y*2, color+1);
-                draw_tilemap(x*2, y*2+1, color+2);
-                draw_tilemap(x*2+1, y*2+1, color+3);
-            } else {
-                for(int i=0;i<2;i++)
-                    for(int j=0;j<2;j++)
-                        draw_tilemap(x*2+i, y*2+j, color+i+j*2);
+            for(int y=0;y<7;y++)
+            {
+                uint8_t color = TILE_COLOR_WHITE;
+                if(game.districts[x][y].state == DISTRICT_STATE_MAYOR) color = TILE_COLOR_GREEN;
+                if(game.districts[x][y].state == DISTRICT_STATE_MAFIA) color = TILE_COLOR_RED;
+                if(color==TILE_COLOR_WHITE) {
+                    //fill_tilemap(color, x*2, y*2, 2, 2);
+                    draw_tilemap(x*2, y*2, color);
+                    draw_tilemap(x*2+1, y*2, color+1);
+                    draw_tilemap(x*2, y*2+1, color+2);
+                    draw_tilemap(x*2+1, y*2+1, color+3);
+                } else {
+                    for(int i=0;i<2;i++)
+                        for(int j=0;j<2;j++)
+                            draw_tilemap(x*2+i, y*2+j, color+i+j*2);
+                }
             }
         }
-    }
-    render_tilemap(0);
+        render_tilemap(0);
 
-    // Show the stats for the current tile under the cursor, on the right.
-    char buffer[64];
-    struct District *district = &game.districts[cursor_x][cursor_y];
-    sprintf(buffer, "District %d,%d", cursor_x, cursor_y);
-    clear_text_tiles(COL_DARK_BLUE);
-    draw_text(1, 0, buffer, COL_YELLOW);
-    sprintf(buffer, "State: %s", district->state==DISTRICT_STATE_EMPTY?"Empty":district->state==DISTRICT_STATE_MAYOR?"Mayor":"Mafia");
-    draw_text(1, 8, buffer, COL_WHITE);
-    render_text(0x80, 6);
-    for(int i=0;i<6;i++)
-        draw_tilemap(14+i, 0, 0x80+i);
-    clear_text_tiles(COL_DARK_BLUE);
-    sprintf(buffer, "$$$: %s", district->wealth==DISTRICT_WEALTH_POOR?"Poor":district->wealth==DISTRICT_WEALTH_MIDDLE?"Middle":"Rich");
-    draw_text(1, 0, buffer, COL_WHITE);
-    sprintf(buffer, "Pop: %d", district->population);
-    draw_text(1, 8, buffer, COL_WHITE);
-    render_text(0x86, 6);
-    for(int i=0;i<6;i++)
-        draw_tilemap(14+i, 1, 0x86+i);
-    clear_text_tiles(COL_DARK_BLUE);
-    sprintf(buffer, "Inf: %d", district->influence);
-    draw_text(1, 0, buffer, COL_WHITE);
-    sprintf(buffer, "Turn: %d", game.turn);
-    draw_text(1, 8, buffer, COL_WHITE);
-    render_text(0x8c, 6);
-    for(int i=0;i<6;i++)
-        draw_tilemap(14+i, 2, 0x8c+i);
+        // Show the stats for the current tile under the cursor, on the right.
+        char buffer[64];
+        struct District *district = &game.districts[cursor_x][cursor_y];
+        sprintf(buffer, "District %d,%d", cursor_x, cursor_y);
+        clear_text_tiles(COL_DARK_BLUE);
+        draw_text(1, 0, buffer, COL_YELLOW);
+        sprintf(buffer, "State: %s", district->state==DISTRICT_STATE_EMPTY?"Empty":district->state==DISTRICT_STATE_MAYOR?"Mayor":"Mafia");
+        draw_text(1, 8, buffer, COL_WHITE);
+        render_text(0x80, 6);
+        for(int i=0;i<6;i++)
+            draw_tilemap(14+i, 0, 0x80+i);
+        clear_text_tiles(COL_DARK_BLUE);
+        sprintf(buffer, "$$$: %s", district->wealth==DISTRICT_WEALTH_POOR?"Poor":district->wealth==DISTRICT_WEALTH_MIDDLE?"Middle":"Rich");
+        draw_text(1, 0, buffer, COL_WHITE);
+        sprintf(buffer, "Pop: %d", district->population);
+        draw_text(1, 8, buffer, COL_WHITE);
+        render_text(0x86, 6);
+        for(int i=0;i<6;i++)
+            draw_tilemap(14+i, 1, 0x86+i);
+        clear_text_tiles(COL_DARK_BLUE);
+        sprintf(buffer, "Inf: %d", district->influence);
+        draw_text(1, 0, buffer, COL_WHITE);
+        sprintf(buffer, "Turn: %d", game.turn);
+        draw_text(1, 8, buffer, COL_WHITE);
+        render_text(0x8c, 6);
+        for(int i=0;i<6;i++)
+            draw_tilemap(14+i, 2, 0x8c+i);
 
-    // Draw player stats at the bottom.
-    clear_text_tiles(COL_DARK_BLUE);
-    sprintf(buffer, "Player %s", game.current_player==0?"Mayor":"Mafia");
-    draw_text(1, 0, buffer, COL_YELLOW);
-    sprintf(buffer, "$$$: %d", game.players[game.current_player].money);
-    draw_text(1, 8, buffer, COL_WHITE);
-    render_text(0x92, 6);
-    for(int i=0;i<6;i++)
-        draw_tilemap(14+i, 4, 0x92+i);
-    clear_text_tiles(COL_DARK_BLUE);
-    sprintf(buffer, "Terr: %d", game.players[game.current_player].teritories);
-    draw_text(1, 0, buffer, COL_WHITE);
-    sprintf(buffer, "Turn: %d", game.turn);
-    draw_text(1, 8, buffer, COL_WHITE);
-    render_text(0x98, 6);
-    for(int i=0;i<6;i++)
-        draw_tilemap(14+i, 5, 0x98+i);
-        
+        // Draw player stats at the bottom.
+        clear_text_tiles(COL_DARK_BLUE);
+        sprintf(buffer, "Player %s", game.current_player==0?"Mayor":"Mafia");
+        draw_text(1, 0, buffer, COL_YELLOW);
+        sprintf(buffer, "$$$: %d", game.players[game.current_player].money);
+        draw_text(1, 8, buffer, COL_WHITE);
+        render_text(0x92, 6);
+        for(int i=0;i<6;i++)
+            draw_tilemap(14+i, 4, 0x92+i);
+        clear_text_tiles(COL_DARK_BLUE);
+        sprintf(buffer, "Terr: %d", game.players[game.current_player].teritories);
+        draw_text(1, 0, buffer, COL_WHITE);
+        sprintf(buffer, "Turn: %d", game.turn);
+        draw_text(1, 8, buffer, COL_WHITE);
+        render_text(0x98, 6);
+        for(int i=0;i<6;i++)
+            draw_tilemap(14+i, 5, 0x98+i);
+
+        timer=30;
+    } else {
+        timer--;
+    }           
     // Draw the cursor as 4 sprites.
     reset_sprite();
     add_sprite(cursor_x*32, cursor_y*32, TILE_CURSOR);

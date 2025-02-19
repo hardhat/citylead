@@ -276,7 +276,8 @@ void render_text(uint8_t tile, uint8_t tile_count)
 
 void draw_tilemap(uint16_t x, uint8_t y, uint8_t tile)
 {
-    tilemap0[y*tilemap_width+x] = tile;}
+    tilemap0[y*tilemap_width+x] = tile;
+}
 
 void draw_tilemap_array(uint16_t x, uint8_t y, uint8_t *tile, uint8_t count)
 {
@@ -344,7 +345,7 @@ void process_input(void)
         read(DEV_STDIN, &keys, &size);
         for(int i=0;i<size;i++) {
             char key = keys[i];
-           logf("Processing input key %02x.", key);
+           //logf("Processing input key %02x.", key);
            if(key == KB_RELEASED) {
                 pressed = false;
             } else {
