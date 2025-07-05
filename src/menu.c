@@ -79,10 +79,12 @@ void update_menu(void)
 void draw_menu(void)
 {
     clear_text_tiles(COL_WHITE);
+    set_font(FONT_SPEEDWAY_BOLD);
+    draw_text(0,choice==0?0:8,">",COL_RED);
     set_font(choice==0?FONT_SPEEDWAY_BOLD:FONT_SPEEDWAY);
-    draw_text(0,0,"Play as Mayor",choice==0?choice_color:COL_DARK_RED);
+    draw_text(8,0,"Play as Mayor",choice==0?choice_color:COL_DARK_RED);
     set_font(choice==1?FONT_SPEEDWAY_BOLD:FONT_SPEEDWAY);
-    draw_text(0,8,"Play as Mafia",choice==1?choice_color:COL_DARK_RED);
+    draw_text(8,8,"Play as Mafia",choice==1?choice_color:COL_DARK_RED);
     render_text(CHOICE_TILE, 7);
     render_tilemap(0);
 }
